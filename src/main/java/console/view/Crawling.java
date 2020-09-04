@@ -9,7 +9,11 @@ import java.io.InputStreamReader;
 
 import static console.domain.CrawlingApi.*;
 
+
 public class Crawling {
+
+    private static final String LINE = "================================";
+
 
     public static void main(String[] args) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -20,13 +24,13 @@ public class Crawling {
 
             System.out.println(LINE);
 
-            Document document = CrawlingApi.getBibleText(url);
+            Document document = CrawlingApi.getBible(url);
 
             printBibleText(document);
 
             printBibleInfo(document);
 
-            document = getBibleText(url);
+            document = getBible(url);
 
             printElements(document);
 

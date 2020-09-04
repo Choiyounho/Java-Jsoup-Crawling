@@ -10,10 +10,6 @@ import java.io.IOException;
 
 public class CrawlingApi {
 
-    public CrawlingApi(){}
-
-    public static final String LINE = "================================";
-
     private static final String INPUT_DATE = "[입력->년(yyyy)-월(mm)-일(dd)]:";
 
     private static final String JSOUP_CRAWLING_URL = "https://sum.su.or.kr:8888/bible/today/Ajax/Bible/BosyMatter?qt_ty=QT1";
@@ -41,7 +37,7 @@ public class CrawlingApi {
         return url.toString();
     }
 
-    public static Document getBibleText(String url) throws IOException {
+    public static Document getBible(String url) throws IOException {
         Document document = Jsoup.connect(url).post();
         return document;
     }
