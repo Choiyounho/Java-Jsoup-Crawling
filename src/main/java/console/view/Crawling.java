@@ -8,17 +8,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static console.domain.CrawlingApi.*;
+import static console.view.CrawlingView.*;
+import static utils.CommonsConstant.LINE;
 
 
 public class Crawling {
 
-    private static final String LINE = "================================";
-
-
     public static void main(String[] args) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            String urlDate = CrawlingApi.inputDate(bufferedReader);
+            String urlDate = CrawlingView.inputDate(bufferedReader);
 
             String url = CrawlingApi.initJoupApiUrl(urlDate);
 
