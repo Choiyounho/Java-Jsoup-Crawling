@@ -1,6 +1,7 @@
-package console.view;
+package console;
 
 import console.domain.CrawlingApi;
+import console.view.CrawlingView;
 import org.jsoup.nodes.Document;
 
 import java.io.BufferedReader;
