@@ -10,7 +10,6 @@ import static utils.CommonsConstant.JSOUP_CRWALING_URL_BASE;
 
 public class CrawlingApi {
 
-
     private static final String JSOUP_CRAWLING_URL = "https://sum.su.or.kr:8888/bible/today/Ajax/Bible/BosyMatter?qt_ty=QT1";
 
     public static String initJoupApiUrl(String urlDate) {
@@ -23,8 +22,7 @@ public class CrawlingApi {
     }
 
     public static Document getBible(String url) throws IOException {
-        Document document = Jsoup.connect(url).post();
-        return document;
+        return Jsoup.connect(url).post();
     }
 
 

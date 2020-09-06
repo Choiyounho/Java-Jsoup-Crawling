@@ -12,6 +12,7 @@ import static utils.CommonsConstant.*;
 public class CrawlingView {
 
     private static final String INPUT_DATE = "[입력->년(yyyy)-월(mm)-일(dd)]:";
+    public static final String LINE = "================================";
 
     public static String inputDate(BufferedReader inputStreamReader) throws IOException {
         System.out.print(INPUT_DATE);
