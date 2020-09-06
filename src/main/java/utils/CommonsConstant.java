@@ -2,6 +2,9 @@ package utils;
 
 public class CommonsConstant {
 
+    private CommonsConstant() {
+    }
+
     public static final String COLON = ":";
     public static final String BODY_LIST_LI = ".body_list > li";
     public static final String CSS_NUM = ".num";
@@ -11,4 +14,9 @@ public class CommonsConstant {
 
     public static final String JSOUP_CRAWLING_URL_BIBLE_TYPE = "&bibleType=1";
     public static final String JSOUP_CRWALING_URL_BASE = "&Base_de=";
+
+    public static final String JSOUP_CRAWLING_GUI_API = "https://sum.su.or.kr:8888/bible/today/Ajax/Bible/BodyMatter?qt_ty=QT1&Base_de=";
+
+    public static final String BLANK = "";
+    public static final String HYPHEN = "-";
 }
