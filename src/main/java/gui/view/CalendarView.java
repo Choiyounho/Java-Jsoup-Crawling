@@ -49,8 +49,8 @@ public class CalendarView extends JFrame {
     private JLabel monthJLabel;
     private Calendar calendar = Calendar.getInstance();
 
-    private  JLabel[] dayLabel = new JLabel[7];
-    private  JPanel selectPanel = new JPanel();
+    private JLabel[] dayLabel = new JLabel[7];
+    private JPanel selectPanel = new JPanel();
 
     private String[] day = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
     private JButton[] days = new JButton[42];
