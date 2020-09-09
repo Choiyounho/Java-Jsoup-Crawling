@@ -16,11 +16,12 @@ import static utils.CommonsConstant.CSS_INFO;
 
 public class CrawlingActionListener implements ActionListener {
 
-    public JTextArea area;
+    private static final String HASHTAG_BIBLE_INFO_BOX = "#bibleinfo_box";
+    private static final String HASHTAG_DAILY_BIBLE_INFO = "#dailybible_info";
+
+    private JTextArea area;
     private Choice choiceYear;
     private Choice choiceMonth;
-    public static final String HASHTAG_BIBLE_INFO_BOX = "#bibleinfo_box";
-    public static final String HASHTAG_DAILY_BIBLE_INFO = "#dailybible_info";
 
     public CrawlingActionListener(JTextArea area, Choice choiceYear, Choice choiceMonth) {
         this.area = area;
@@ -58,20 +59,24 @@ public class CrawlingActionListener implements ActionListener {
             Elements liList = document.select(BODY_LIST_LI);
             for (Element li : liList) {
                 String line = li.select(CSS_INFO).first().text();
-                if (line.length() > 65) { // 너무 길면 줄바꿈 하기
-                    line = line.substring(0, 36) + "\n" + line.substring(36, 66) + "\n" + line.substring(66) + "\n";
-                    area.append(li.select(CSS_NUM).first().text() + COLON + line);
-                } else if (line.length() > 35) {
-                    line = line.substring(0, 36) + "\n" + line.substring(36) + "\n";
-                    area.append(li.select(CSS_NUM).first().text() + COLON + line);
-                } else {
-                    area.append(li.select(CSS_NUM).first().text() + COLON + li.select(CSS_INFO).first().text() + "\n");
-                }
+                lineLengthCondition(li, line);
                 System.out.print(li.select(CSS_NUM).first().text() + COLON);
                 System.out.println(li.select(CSS_INFO).first().text());
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void lineLengthCondition(Element li, String line) {
+        if (line.length() > 65) { // 너무 길면 줄바꿈 하기
+            line = line.substring(0, 36) + "\n" + line.substring(36, 66) + "\n" + line.substring(66) + "\n";
+            area.append(li.select(CSS_NUM).first().text() + COLON + line);
+        } else if (line.length() > 35) {
+            line = line.substring(0, 36) + "\n" + line.substring(36) + "\n";
+            area.append(li.select(CSS_NUM).first().text() + COLON + line);
+        } else {
+            area.append(li.select(CSS_NUM).first().text() + COLON + li.select(CSS_INFO).first().text() + "\n");
         }
     }
 }

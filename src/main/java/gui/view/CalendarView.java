@@ -9,67 +9,63 @@ import java.util.GregorianCalendar;
 import static utils.CommonsConstant.BLANK;
 import static utils.CommonsConstant.HYPHEN;
 
-public class CalandarView extends JFrame {
+public class CalendarView extends JFrame {
 
-    private GregorianCalendar gregorianCalendar;
-    private int year;
-    private int month;
-    public JTextArea area;
+    private static final String SUNDAY = "일";
+    private static final String MONDAY = "월";
+    private static final String TUESDAY = "화";
+    private static final String WEDNESDAY = "수";
+    private static final String THURSDAY = "목";
+    private static final String FRIDAY = "금";
+    private static final String SATURDAY = "토";
+    private static final String YEAR = "년";
+    private static final String MONTH = "월";
+    private static final String DATE = "날짜 : ";
+    private static final int DIVISION_VALUE = 2;
+
+    private static final int GRID_LAYOUT_ROWS = 7;
+    private static final int GRID_LATOUT_COLS = 7;
+    private static final int GRID_LAYOUT_HORIZONTAL_GAP = 5;
+    private static final int GRID_LAYOUT_VERTICAL_GAP = 5;
+    private static final GridLayout grid = new GridLayout(GRID_LAYOUT_ROWS, GRID_LATOUT_COLS, GRID_LAYOUT_HORIZONTAL_GAP, GRID_LAYOUT_VERTICAL_GAP);//행,열,수평갭,수직갭
+
+    private static final int LAST_YEAR = 2020;
+    private static final int FIRST_YEAR = 2000;
+    private static final int GUI_WIDTH = 900;
+    private static final int GUI_HEIGHT = 600;
+
+    private static final int JTEXT_AREA_RWOS = 60;
+    private static final int JTEXT_AREA_COLUMNS = 40;
+
+    private static final String JSCROLLPANE_LOCATION_NORTH = "North";
+    private static final String SCROLLPANE_LOCATION_CENTER = "Center";
+    private static final String JSCROLLPANE_LOCATION_CENTER1 = SCROLLPANE_LOCATION_CENTER;
+    private static final String JSCROLLPANE_LOCATION_EAST = "East";
+
     private Choice choiceYear;
     private Choice choiceMonth;
 
     private JLabel yearJLabel;
     private JLabel monthJLabel;
     private Calendar calendar = Calendar.getInstance();
-    public static final String SUNDAY = "일";
-    public static final String MONDAY = "월";
-    public static final String TUESDAY = "화";
-    public static final String WEDNESDAY = "수";
-    public static final String THURSDAY = "목";
-    public static final String FRIDAY = "금";
-    public static final String SATURDAY = "토";
+
+    private  JLabel[] dayLabel = new JLabel[7];
+    private  JPanel selectPanel = new JPanel();
+
     private String[] day = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
-    public JButton[] days = new JButton[42];//7일이 6주이므로 42개의 버튼필요
-    public static final int GRID_LAYOUT_ROWS = 7;
-    public static final int GRID_LATOUT_COLS = 7;
-    public static final int GRID_LAYOUT_HORIZONTAL_GAP = 5;
-    public static final int GRID_LAYOUT_VERTICAL_GAP = 5;
-    private GridLayout grid = new GridLayout(GRID_LAYOUT_ROWS, GRID_LATOUT_COLS, GRID_LAYOUT_HORIZONTAL_GAP, GRID_LAYOUT_VERTICAL_GAP);//행,열,수평갭,수직갭
-    public static final int LAST_YEAR = 2020;
-    public static final int FIRST_YEAR = 2000;
-    public static final int GUI_WIDTH = 900;
-    public static final int GUI_HEIGHT = 600;
-    public static final String YEAR = "년";
-    public static final String MONTH = "월";
-    private JLabel[] dayLabel = new JLabel[7];
-    private JPanel selectPanel = new JPanel();
-    public static final int JTEXT_AREA_RWOS = 60;
-    public static final int JTEXT_AREA_COLUMNS = 40;
+    private JButton[] days = new JButton[42];
 
-    public static final String JSCROLLPANE_LOCATION_NORTH = "North";
-    public static final String SCROLLPANE_LOCATION_CENTER = "Center";
-    public static final String JSCROLLPANE_LOCATION_CENTER1 = SCROLLPANE_LOCATION_CENTER;
-    public static final String JSCROLLPANE_LOCATION_EAST = "East";
-
-    public static final String DATE = "날짜 : ";
-    public static final int DIVISION_VALUE = 2;
-
-    private Dimension dimension;
-    private Dimension dimension1;
-    private int xPosition;
-    private int yPosition;
-
-    public CalandarView() {
+    public CalendarView() {
         setTitle(DATE + calendar.get(Calendar.YEAR) + HYPHEN + (calendar.get(Calendar.MONTH) + 1) + HYPHEN + calendar.get(Calendar.DATE));
         setSize(GUI_WIDTH, GUI_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        dimension1 = this.getSize();
-        xPosition = (int) (dimension.getWidth() / DIVISION_VALUE - dimension1.getWidth() / DIVISION_VALUE);
-        yPosition = (int) (dimension.getHeight() / DIVISION_VALUE - dimension1.getHeight() / DIVISION_VALUE);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dimension1 = this.getSize();
+        int xPosition = (int) (dimension.getWidth() / DIVISION_VALUE - dimension1.getWidth() / DIVISION_VALUE);
+        int yPosition = (int) (dimension.getHeight() / DIVISION_VALUE - dimension1.getHeight() / DIVISION_VALUE);
 
-        setLocation(xPosition, yPosition);//화면의 가운데에 출력
+        setLocation(xPosition, yPosition);
         setResizable(false);
         setVisible(true);
 
@@ -81,7 +77,7 @@ public class CalandarView extends JFrame {
         init();
     }
 
-    public void init() {
+    private void init() {
         select();
         calendar();
     }
@@ -90,13 +86,13 @@ public class CalandarView extends JFrame {
         return this.getBackground();
     }
 
-    public void select() {
+    private void select() {
         JPanel panel = new JPanel(grid);//7행 7열의 그리드레이아웃
 
         for (int i = LAST_YEAR; i >= FIRST_YEAR; i--) {
             choiceYear.add(String.valueOf(i));
         }
-        for (int i = 1; i <= 12; i++) { //TODO : 1월 부터 12월 까지라서 바뀔 일이 없어 그대로 유지
+        for (int i = 1; i <= 12; i++) {
             choiceMonth.add(String.valueOf(i));
         }
         for (int i = 0; i < day.length; i++) {//요일 이름을 레이블에 출력
@@ -113,10 +109,10 @@ public class CalandarView extends JFrame {
         selectPanel.add(choiceMonth);
         selectPanel.add(monthJLabel);
 
-        area = new JTextArea(JTEXT_AREA_RWOS, JTEXT_AREA_COLUMNS);
+        JTextArea area = new JTextArea(JTEXT_AREA_RWOS, JTEXT_AREA_COLUMNS);
         area.setCaretPosition(area.getDocument().getLength());
         JScrollPane scrollPane = new JScrollPane(area);
-        this.add(selectPanel, JSCROLLPANE_LOCATION_NORTH);//연도와 월을 선택할 수 있는 화면읠 상단에 출력
+        this.add(selectPanel, JSCROLLPANE_LOCATION_NORTH); //연도와 월을 선택할 수 있는 화면읠 상단에 출력
         this.add(panel, JSCROLLPANE_LOCATION_CENTER1);
         this.add(scrollPane, JSCROLLPANE_LOCATION_EAST);
 
@@ -126,26 +122,26 @@ public class CalandarView extends JFrame {
         choiceMonth.select(m);
         CrawlingActionListener actionListener = new CrawlingActionListener(area, choiceYear, choiceMonth);
         for (int i = 0; i < 42; i++) {//TODO : 달력은 42개의 날짜 고정이라 상수화 X
-            days[i] = new JButton("");//제목이 없는 버튼 생성
+            days[i] = new JButton(BLANK); //제목이 없는 버튼 생성
             if (i % 7 == 0)
-                days[i].setForeground(Color.RED);//일요일 버튼의 색
+                days[i].setForeground(Color.RED); //일요일 버튼의 색
             else if (i % 7 == 6)
-                days[i].setForeground(Color.BLUE);//토요일 버튼의 색
+                days[i].setForeground(Color.BLUE); //토요일 버튼의 색
             else
                 days[i].setForeground(Color.BLACK);
             days[i].addActionListener(actionListener);
             panel.add(days[i]);
         }
-        ItemListener itemListener = new CrawlingItemListener();
+        ItemListener itemListener = new CrawlingItemListener(days);
         choiceYear.addItemListener(itemListener);
         choiceMonth.addItemListener(itemListener);
     }
 
 
     public void calendar() {
-        year = Integer.parseInt(choiceYear.getSelectedItem());
-        month = Integer.parseInt(choiceMonth.getSelectedItem());
-        gregorianCalendar = new GregorianCalendar(year, month - 1, 1);
+        int year = Integer.parseInt(choiceYear.getSelectedItem());
+        int month = Integer.parseInt(choiceMonth.getSelectedItem());
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month - 1, 1);
         int max = gregorianCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);//해당 달의 최대 일 수 획득
         int week = gregorianCalendar.get(Calendar.DAY_OF_WEEK);//해당 달의 시작 요일
 
