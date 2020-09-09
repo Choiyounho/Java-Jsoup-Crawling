@@ -32,7 +32,7 @@ public class CrawlingView {
     public static void printElements(Document document) {
         Elements liList = document.select(BODY_LIST_LI);
         for (Element li : liList) {
-            System.out.println(li.select(CSS_NUM).first().text() + COLON);
+            System.out.print(li.select(CSS_NUM).first().text() + COLON);
             System.out.println(li.select(CSS_INFO).first().text());
         }
     }
