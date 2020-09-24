@@ -6,17 +6,19 @@ import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static utils.CommonsConstant.*;
 
 public class CrawlingView {
 
     private static final String INPUT_DATE = "[입력->년(yyyy)-월(mm)-일(dd)]:";
-    public static final String LINE = "================================";
+    private static final String LINE = "================================";
+    private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-    public static String inputDate(BufferedReader inputStreamReader) throws IOException {
+    public static String inputDate() throws IOException {
         System.out.print(INPUT_DATE);
-        return inputStreamReader.readLine();
+        return bufferedReader.readLine();
     }
 
     public static void printBibleText(Document document) {
@@ -31,10 +33,15 @@ public class CrawlingView {
 
     public static void printElements(Document document) {
         Elements liList = document.select(BODY_LIST_LI);
-        for (Element li : liList) {
-            System.out.print(li.select(CSS_NUM).first().text() + COLON);
-            System.out.println(li.select(CSS_INFO).first().text());
-        }
+        liList.stream()
+                .forEach(li -> {
+                    System.out.print(li.select(CSS_NUM).first().text() + COLON);
+                    System.out.println(li.select(CSS_INFO).first().text());
+                });
+    }
+
+    public static void printLine() {
+        System.out.println(LINE);
     }
 
 }

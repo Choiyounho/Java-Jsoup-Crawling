@@ -15,13 +15,10 @@ import static console.view.CrawlingView.*;
 public class CrawlingApplication {
 
     public static void main(String[] args) {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
         try {
-            String urlDate = CrawlingView.inputDate(bufferedReader);
-            String url = CrawlingApi.initJoupApiUrl(urlDate);
+            String url = CrawlingApi.initJsoupApiUrl(CrawlingView.inputDate());
 
-            System.out.println(LINE);
+            CrawlingView.printLine();
 
             Document document = CrawlingApi.getBible(url);
             printBibleText(document);
@@ -30,7 +27,7 @@ public class CrawlingApplication {
 
             printElements(document);
 
-            System.out.println(LINE);
+            CrawlingView.printLine();
         } catch (IOException e) {
             System.out.println("IOException e" + e.getMessage());
         } catch (Exception e) {
