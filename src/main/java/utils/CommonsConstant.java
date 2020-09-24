@@ -2,9 +2,6 @@ package utils;
 
 public class CommonsConstant {
 
-    private CommonsConstant() {
-    }
-
     public static final String COLON = ":";
     public static final String BODY_LIST_LI = ".body_list > li";
     public static final String CSS_NUM = ".num";
@@ -19,4 +16,8 @@ public class CommonsConstant {
 
     public static final String BLANK = "";
     public static final String HYPHEN = "-";
+
+    private CommonsConstant() {
+    }
+
 }
