@@ -17,6 +17,8 @@ public class CommonsConstant {
     public static final String BLANK = "";
     public static final String HYPHEN = "-";
 
+    public static final int NUMBER_ZERO = 0;
+
     private CommonsConstant() {
     }
 

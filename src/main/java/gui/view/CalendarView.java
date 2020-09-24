@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.ItemListener;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.stream.IntStream;
 
-import static utils.CommonsConstant.BLANK;
-import static utils.CommonsConstant.HYPHEN;
+import static utils.CommonsConstant.*;
 
 public class CalendarView extends JFrame {
 
@@ -24,46 +24,53 @@ public class CalendarView extends JFrame {
     private static final int DIVISION_VALUE = 2;
 
     private static final int GRID_LAYOUT_ROWS = 7;
-    private static final int GRID_LATOUT_COLS = 7;
+    private static final int GRID_LAYOUT_COLUMNS = 7;
     private static final int GRID_LAYOUT_HORIZONTAL_GAP = 5;
     private static final int GRID_LAYOUT_VERTICAL_GAP = 5;
-    private static final GridLayout grid = new GridLayout(GRID_LAYOUT_ROWS, GRID_LATOUT_COLS, GRID_LAYOUT_HORIZONTAL_GAP, GRID_LAYOUT_VERTICAL_GAP);//행,열,수평갭,수직갭
+    private static final GridLayout grid = new GridLayout(GRID_LAYOUT_ROWS, GRID_LAYOUT_COLUMNS, GRID_LAYOUT_HORIZONTAL_GAP, GRID_LAYOUT_VERTICAL_GAP); //행,열,수평갭,수직갭
 
     private static final int LAST_YEAR = 2020;
     private static final int FIRST_YEAR = 2000;
     private static final int GUI_WIDTH = 900;
     private static final int GUI_HEIGHT = 600;
 
-    private static final int JTEXT_AREA_RWOS = 60;
+    private static final int JTEXT_AREA_ROWS = 60;
     private static final int JTEXT_AREA_COLUMNS = 40;
+    private static final int JBUTTON_TOTAL_COLUMNS_AND_ROWS = 42;
 
     private static final String JSCROLLPANE_LOCATION_NORTH = "North";
     private static final String SCROLLPANE_LOCATION_CENTER = "Center";
     private static final String JSCROLLPANE_LOCATION_CENTER1 = SCROLLPANE_LOCATION_CENTER;
     private static final String JSCROLLPANE_LOCATION_EAST = "East";
+    public static final int INCREASE_MONTHS = 1;
+    public static final int JANUARY = 1;
+    public static final int DECEMBER = 12;
+    public static final int INDEX_SATURDAY = 6;
+    public static final int INDEX_SUNDAY = 0;
 
     private Choice choiceYear;
     private Choice choiceMonth;
 
-    private JLabel yearJLabel;
-    private JLabel monthJLabel;
-    private Calendar calendar = Calendar.getInstance();
+    private final JLabel yearJLabel;
+    private final JLabel monthJLabel;
+    private final Calendar calendar = Calendar.getInstance();
 
-    private JLabel[] dayLabel = new JLabel[7];
+    private final JLabel[] dayLabel = new JLabel[GRID_LAYOUT_COLUMNS];
     private JPanel selectPanel = new JPanel();
 
-    private String[] day = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
-    private JButton[] days = new JButton[42];
+    private final String[] day = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
+    private final JButton[] days = new JButton[JBUTTON_TOTAL_COLUMNS_AND_ROWS];
 
     public CalendarView() {
-        setTitle(DATE + calendar.get(Calendar.YEAR) + HYPHEN + (calendar.get(Calendar.MONTH) + 1) + HYPHEN + calendar.get(Calendar.DATE));
+        setTitle(printFrameTitle());
         setSize(GUI_WIDTH, GUI_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension dimension1 = this.getSize();
-        int xPosition = (int) (dimension.getWidth() / DIVISION_VALUE - dimension1.getWidth() / DIVISION_VALUE);
-        int yPosition = (int) (dimension.getHeight() / DIVISION_VALUE - dimension1.getHeight() / DIVISION_VALUE);
+        // TODO : layout(Right, Left)Frame 어떤 역할인지 확인하고, 이름 맞게 변경하기
+        Dimension layoutRightFrame = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension layoutLeftFrame = this.getSize();
+        int xPosition = (int) ((layoutRightFrame.getWidth() / DIVISION_VALUE) - (layoutLeftFrame.getWidth() / DIVISION_VALUE));
+        int yPosition = (int) ((layoutRightFrame.getHeight() / DIVISION_VALUE) - (layoutLeftFrame.getHeight() / DIVISION_VALUE));
 
         setLocation(xPosition, yPosition);
         setResizable(false);
@@ -77,8 +84,19 @@ public class CalendarView extends JFrame {
         init();
     }
 
+    private String printFrameTitle() {
+        return new StringBuilder()
+                .append(DATE)
+                .append(calendar.get(Calendar.YEAR))
+                .append(HYPHEN)
+                .append(calendar.get(Calendar.MONTH) + INCREASE_MONTHS)
+                .append(HYPHEN)
+                .append(calendar.get(Calendar.DATE))
+                .toString();
+    }
+
     private void init() {
-        select();
+        createCalendarFrame();
         calendar();
     }
 
@@ -86,34 +104,25 @@ public class CalendarView extends JFrame {
         return this.getBackground();
     }
 
-    private void select() {
-        JPanel panel = new JPanel(grid);//7행 7열의 그리드레이아웃
+    private void createCalendarFrame() {
+        JPanel calendarFrame = new JPanel(grid);//7행 7열의 그리드레이아웃
 
-        for (int i = LAST_YEAR; i >= FIRST_YEAR; i--) {
-            choiceYear.add(String.valueOf(i));
-        }
-        for (int i = 1; i <= 12; i++) {
-            choiceMonth.add(String.valueOf(i));
-        }
-        for (int i = 0; i < day.length; i++) {//요일 이름을 레이블에 출력
-            dayLabel[i] = new JLabel(day[i], JLabel.CENTER);
-            panel.add(dayLabel[i]);
-        }
+        choiceYear = initChoiceYear();
+        choiceMonth = initChoiceMonth();
+        initCalendarFrame(calendarFrame);
 
-        dayLabel[6].setForeground(Color.BLUE);//토요일 색상
-        dayLabel[0].setForeground(Color.RED);//일요일 색상
+        dayLabel[INDEX_SATURDAY].setForeground(Color.BLUE);//토요일 색상
+        dayLabel[INDEX_SUNDAY].setForeground(Color.RED);//일요일 색상
 
+        // TODO : selectPanel 이 어떤 역할인지 확인해보고 변수 명 바꾸기
+        initSelectPanel(selectPanel);
 
-        selectPanel.add(choiceYear);
-        selectPanel.add(yearJLabel);
-        selectPanel.add(choiceMonth);
-        selectPanel.add(monthJLabel);
-
-        JTextArea area = new JTextArea(JTEXT_AREA_RWOS, JTEXT_AREA_COLUMNS);
+        JTextArea area = new JTextArea(JTEXT_AREA_ROWS, JTEXT_AREA_COLUMNS);
         area.setCaretPosition(area.getDocument().getLength());
+
         JScrollPane scrollPane = new JScrollPane(area);
         this.add(selectPanel, JSCROLLPANE_LOCATION_NORTH); //연도와 월을 선택할 수 있는 화면읠 상단에 출력
-        this.add(panel, JSCROLLPANE_LOCATION_CENTER1);
+        this.add(calendarFrame, JSCROLLPANE_LOCATION_CENTER1);
         this.add(scrollPane, JSCROLLPANE_LOCATION_EAST);
 
         String m = (calendar.get(Calendar.MONTH) + 1) + BLANK;
@@ -130,11 +139,40 @@ public class CalendarView extends JFrame {
             else
                 days[i].setForeground(Color.BLACK);
             days[i].addActionListener(actionListener);
-            panel.add(days[i]);
+            calendarFrame.add(days[i]);
         }
         ItemListener itemListener = new CrawlingItemListener(days);
         choiceYear.addItemListener(itemListener);
         choiceMonth.addItemListener(itemListener);
+    }
+
+    private JPanel initSelectPanel(JPanel selectPanel) {
+        selectPanel.add(choiceYear);
+        selectPanel.add(yearJLabel);
+        selectPanel.add(choiceMonth);
+        selectPanel.add(monthJLabel);
+        return selectPanel;
+    }
+
+    private void initCalendarFrame(JPanel calendarFrame) {
+        IntStream.range(INDEX_SUNDAY, day.length).forEach(index -> {
+            dayLabel[index] = new JLabel(day[index], JLabel.CENTER);
+            calendarFrame.add(dayLabel[index]);
+        });
+    }
+
+    private Choice initChoiceMonth() {
+        for (int i = JANUARY; i <= DECEMBER; i++) {
+            choiceMonth.add(String.valueOf(i));
+        }
+        return choiceMonth;
+    }
+
+    private Choice initChoiceYear() {
+        for (int i = LAST_YEAR; i >= FIRST_YEAR; i--) {
+            choiceYear.add(String.valueOf(i));
+        }
+        return choiceYear;
     }
 
 

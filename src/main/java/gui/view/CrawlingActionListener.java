@@ -1,6 +1,6 @@
 package gui.view;
 
-import gui.GuiCrawlingApi;
+import gui.domain.GuiCrawlingApi;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
